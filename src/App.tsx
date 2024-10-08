@@ -1,6 +1,5 @@
 import React from "react";
 import { Table } from "./components/table/Table";
-import axios from "axios";
 import { observer } from "mobx-react-lite";
 import { store } from "./state/store";
 import Snackbar from "@mui/material/Snackbar";
@@ -9,47 +8,41 @@ import LinearProgress from "@mui/material/LinearProgress";
 import { useConnectSocket } from "./hooks/useConnectSocket";
 
 const App = observer(() => {
-  const [current, setCurrent] = React.useState(0);
+     const [current, setCurrent] = React.useState(0);
 
-  useConnectSocket();
+     useConnectSocket();
 
-  React.useEffect(() => {
-    store.fetchData();
-  }, []);
+     React.useEffect(() => {
+          store.fetchData();
+     }, []);
 
-  return (
-    <div className="App">
-      {store.isLoading && <LinearProgress />}
-      {store.data.length ? (
-        <>
-          <div style={{ display: "flex" }}>
-            <Table
-              switch={setCurrent}
-              data={store.data[0]}
-              isConnected={store.isConnected}
-              clock
-            />
-            {/* <Table
-              clock
-              switch={setCurrent}
-              data={store.data[1]}
-              isConnected={store.isConnected}
-            /> */}
+     return (
+          <div className="App">
+               {store.isLoading && <LinearProgress />}
+               {store.data.length ? (
+                    <>
+                         <div style={{ display: "flex" }}>
+                              <Table
+                                   clock
+                                   switch={setCurrent}
+                                   data={store.data[current]}
+                                   isConnected={store.isConnected}
+                              />
+                         </div>
+                    </>
+               ) : null}
+               {!!store.snackbar && (
+                    <Snackbar
+                         open
+                         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                         onClose={() => store.setSnackBar(null)}
+                         autoHideDuration={6000}
+                    >
+                         <Alert {...store.snackbar} onClose={() => store.setSnackBar(null)} />
+                    </Snackbar>
+               )}
           </div>
-        </>
-      ) : null}
-      {!!store.snackbar && (
-        <Snackbar
-          open
-          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-          onClose={() => store.setSnackBar(null)}
-          autoHideDuration={6000}
-        >
-          <Alert {...store.snackbar} onClose={() => store.setSnackBar(null)} />
-        </Snackbar>
-      )}
-    </div>
-  );
+     );
 });
 
 export default App;

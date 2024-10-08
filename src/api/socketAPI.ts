@@ -5,34 +5,28 @@ import { store } from "../state/store";
 import { RemarkParamType } from "./ScoreService";
 
 export class SocketAPI {
-  static socket: null | Socket = null;
+     static socket: null | Socket = null;
 
-  static createConnection() {
-    this.socket = io(API_URL);
+     static createConnection() {
+          this.socket = io(API_URL);
 
-    this.socket.on("connect", () => {
-      console.log("connected");
-    });
+          this.socket.on("connect", () => {
+               console.log("connected");
+          });
 
-    this.socket.on(
-      "disconnect",
-      (
-        reason: Socket.DisconnectReason,
-        description?: DisconnectDescription
-      ) => {
-        console.log("disconnected", reason, description);
-      }
-    );
-  }
+          this.socket.on("disconnect", (reason: Socket.DisconnectReason, description?: DisconnectDescription) => {
+               console.log("disconnected", reason, description);
+          });
+     }
 
-  static disableConnection() {
-    this.socket?.disconnect();
-  }
+     static disableConnection() {
+          this.socket?.disconnect();
+     }
 
-  static remarkSchedule(id: number, dto: RemarkParamType) {
-    this.socket?.emit("remark-schedule", {
-      id,
-      ...dto,
-    });
-  }
+     static remarkSchedule(id: number, dto: RemarkParamType) {
+          this.socket?.emit("remark-schedule", {
+               id,
+               ...dto,
+          });
+     }
 }
